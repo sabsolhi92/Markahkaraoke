@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARI MENYANYI CIKGU! (Firebase Sync)</title>
+    <title>MARI MENYANYI</title>
+    <meta name="apple-mobile-web-app-title" content="MARI MENYANYI">
+    <meta name="application-name" content="MARI MENYANYI">
     
     <!-- Ikon Aplikasi -->
     <link rel="icon" type="image/jpeg" href="image_7ec5c4.jpg">
@@ -14,23 +16,49 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: linear-gradient(135deg, #f5f7ff 0%, #f0f0ff 50%, #fff0f5 100%);
             background-attachment: fixed;
         }
-        .tab-active { border-bottom: 4px solid #6366f1; color: #6366f1; background-color: rgba(99, 102, 241, 0.05); }
-        .bg-cikgu { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
-        
+
+        .tab-active { 
+            border-bottom: 4px solid #6366f1; 
+            color: #6366f1; 
+            background-color: rgba(99, 102, 241, 0.05); 
+        }
+
+        .bg-cikgu { 
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
+        }
+
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+        }
+
+        /* PERATURAN CETAKAN */
         @media print {
-            header, nav, #regForm, #judgeForm, button, .no-print {
+            header, nav, #regForm, #judgeForm, .no-print, button, #syncStatus {
                 display: none !important;
             }
+            body { background: white !important; }
             main { margin: 0; padding: 0; width: 100%; }
             section { display: none !important; }
-            #page-statistik { display: block !important; }
-            .shadow-sm, .shadow-xl { box-shadow: none !important; border: 1px solid #eee; }
+            #page-statistik { display: block !important; padding: 20px; }
+            .glass-card { border: 1px solid #ddd; box-shadow: none !important; backdrop-filter: none; background: white; }
+            #topThreeCards { 
+                display: grid !important; 
+                grid-template-columns: repeat(3, 1fr) !important; 
+                gap: 15px !important; 
+                margin-bottom: 30px;
+            }
+            .print-header { display: block !important; text-align: center; margin-bottom: 30px; }
+            table { width: 100% !important; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd !important; padding: 10px !important; font-size: 10pt !important; }
+            .rank-gold { background-color: #fefce8 !important; }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -39,16 +67,15 @@
 <body class="min-h-screen">
 
     <!-- Header & Navigasi -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-indigo-100 sticky top-0 z-10 shadow-sm no-print">
+    <header class="bg-white/90 backdrop-blur-md border-b border-indigo-100 sticky top-0 z-20 shadow-sm no-print">
         <div class="max-w-5xl mx-auto px-4">
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center gap-3">
-                    <!-- Ikon Kustom -->
-                    <div class="shadow-lg rounded-xl overflow-hidden border-2 border-white ring-2 ring-indigo-100">
-                        <img src="image_7ec5c4.jpg" class="w-12 h-12 object-cover" alt="Logo">
+                    <div class="shadow-lg rounded-xl overflow-hidden border-2 border-white ring-2 ring-indigo-100 bg-white">
+                        <img src="image_7ec5c4.jpg" class="w-12 h-12 object-cover" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3059/3059518.png'">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-black text-slate-800 tracking-tight uppercase leading-none">MARI MENYANYI <span class="text-indigo-600 italic">CIKGU!</span></h1>
+                        <h1 class="text-2xl font-black text-slate-800 tracking-tight uppercase leading-none italic">MARI MENYANYI</h1>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -75,7 +102,7 @@
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto p-4 md:p-6 mt-4">
+    <main class="max-w-6xl mx-auto p-4 md:p-6 mt-4">
         
         <!-- MODUL 1: PENDAFTARAN -->
         <section id="page-pendaftaran" class="space-y-6">
@@ -88,10 +115,10 @@
                 </div>
                 <form id="regForm" class="flex flex-col md:flex-row gap-4">
                     <div class="flex-1 relative">
-                        <input type="text" id="regName" required class="w-full pl-12 pr-4 py-4 border-2 border-indigo-50 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 outline-none text-sm font-bold transition-all" placeholder="Taip nama cikgu di sini...">
+                        <input type="text" id="regName" required class="w-full pl-12 pr-4 py-4 border-2 border-indigo-50 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 outline-none text-sm font-bold transition-all" placeholder="Taip nama peserta di sini...">
                         <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-300 w-5 h-5"></i>
                     </div>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-10 py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-1">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black px-10 py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-1 active:scale-95">
                         SIMPAN NAMA
                     </button>
                 </form>
@@ -127,18 +154,18 @@
                     <div class="bg-purple-100 p-2 rounded-lg text-purple-600">
                         <i data-lucide="edit-3" class="w-5 h-5"></i>
                     </div>
-                    <h2 class="text-lg font-black text-slate-800 uppercase tracking-wider">Pemarkahan</h2>
+                    <h2 class="text-lg font-black text-slate-800 uppercase tracking-wider">Kemasukan Markah</h2>
                 </div>
                 
                 <div class="mb-8 relative">
-                    <label class="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest pl-1">Pilih Nama Cikgu</label>
+                    <label class="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest pl-1">Pilih Nama Peserta</label>
                     <select id="judgeSelect" class="w-full px-6 py-4 border-2 border-purple-50 rounded-2xl focus:ring-4 focus:ring-purple-100 focus:border-purple-400 outline-none appearance-none bg-white font-bold text-slate-700 shadow-sm transition-all cursor-pointer">
                         <option value="">-- Sila Pilih Nama Peserta --</option>
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-6 bottom-4 text-purple-300 w-6 h-6 pointer-events-none"></i>
                 </div>
 
-                <form id="judgeForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 opacity-20 pointer-events-none transition-all duration-500 scale-95 origin-top">
+                <form id="judgeForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 opacity-20 pointer-events-none transition-all duration-500 scale-95 origin-top">
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-indigo-50 shadow-sm">
                         <label class="block text-[10px] font-black text-indigo-400 uppercase tracking-tighter">Vokal (40%)</label>
                         <input type="number" id="v_vocal" min="0" max="40" step="0.1" required class="w-full px-4 py-3 bg-indigo-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-300 outline-none font-black text-indigo-700 text-xl" placeholder="0">
@@ -148,7 +175,7 @@
                         <input type="number" id="v_tempo" min="0" max="20" step="0.1" required class="w-full px-4 py-3 bg-blue-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-300 outline-none font-black text-blue-700 text-xl" placeholder="0">
                     </div>
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-emerald-50 shadow-sm">
-                        <label class="block text-[10px] font-black text-emerald-400 uppercase tracking-tighter">Penghayatan (20%)</label>
+                        <label class="block text-[10px] font-black text-emerald-400 uppercase tracking-tighter">Hayati (20%)</label>
                         <input type="number" id="v_penghayatan" min="0" max="20" step="0.1" required class="w-full px-4 py-3 bg-emerald-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-300 outline-none font-black text-emerald-700 text-xl" placeholder="0">
                     </div>
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-purple-50 shadow-sm">
@@ -156,48 +183,50 @@
                         <input type="number" id="v_stage" min="0" max="10" step="0.1" required class="w-full px-4 py-3 bg-purple-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-300 outline-none font-black text-purple-700 text-xl" placeholder="0">
                     </div>
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-pink-50 shadow-sm">
-                        <label class="block text-[10px] font-black text-pink-400 uppercase tracking-tighter">Penampilan (10%)</label>
+                        <label class="block text-[10px] font-black text-pink-400 uppercase tracking-tighter">Rupa (10%)</label>
                         <input type="number" id="v_style" min="0" max="10" step="0.1" required class="w-full px-4 py-3 bg-pink-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-300 outline-none font-black text-pink-700 text-xl" placeholder="0">
                     </div>
                     
                     <div class="lg:col-span-5 pt-4">
                         <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-5 rounded-[2rem] flex items-center justify-center gap-3 text-xl shadow-xl shadow-emerald-100 transition-all uppercase tracking-widest hover:-translate-y-1 active:scale-95">
-                            <i data-lucide="save" class="w-6 h-6"></i> SAHKAN & SIMPAN MARKAH
+                            <i data-lucide="save" class="w-6 h-6"></i> SIMPAN MARKAH
                         </button>
                     </div>
                 </form>
             </div>
         </section>
 
-        <!-- MODUL 3: STATISTIK -->
+        <!-- MODUL 3: STATISTIK / RUMUSAN -->
         <section id="page-statistik" class="hidden space-y-8 pb-12">
-            <!-- Podium / Top 3 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="topThreeCards"></div>
+            
+            <!-- Bahagian Cetakan (Hanya muncul semasa print) -->
+            <div class="hidden print-header">
+                <img src="image_7ec5c4.jpg" class="w-20 h-20 object-cover mx-auto mb-2 rounded-xl" alt="Logo">
+                <h1 class="text-2xl font-black uppercase">LAPORAN KEPUTUSAN MARI MENYANYI</h1>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-[0.2em]">KEPUTUSAN RASMI PERTANDINGAN KARAOKE</p>
+            </div>
 
-            <div class="bg-white/90 backdrop-blur-md rounded-[2.5rem] border border-indigo-50 overflow-hidden shadow-2xl">
+            <!-- Grid 3 Sebaris untuk Top 3 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="topThreeCards"></div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-[2.5rem] border border-indigo-50 overflow-hidden shadow-2xl">
                 <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 flex justify-between items-center no-print">
                     <div class="flex items-center gap-2 text-white">
                         <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
                         <h3 class="text-sm font-black uppercase tracking-widest">Keputusan Keseluruhan</h3>
                     </div>
-                    <button onclick="window.print()" class="bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-2xl transition-all font-black text-[10px] uppercase flex items-center gap-2 backdrop-blur-sm border border-white/30">
-                        <i data-lucide="printer" class="w-3 h-3"></i> Cetak Keputusan
+                    <button onclick="window.print()" class="bg-white text-indigo-600 hover:bg-indigo-50 px-6 py-2.5 rounded-2xl transition-all font-black text-xs uppercase flex items-center gap-2 shadow-lg active:scale-95">
+                        <i data-lucide="printer" class="w-4 h-4"></i> CETAK KEPUTUSAN
                     </button>
                 </div>
                 
-                <div class="hidden print:block text-center py-10 border-b border-slate-100">
-                    <img src="image_7ec5c4.jpg" class="w-20 h-20 object-cover mx-auto mb-4 rounded-2xl shadow-lg" alt="Logo">
-                    <h1 class="text-3xl font-black uppercase tracking-tighter">MARI MENYANYI CIKGU!</h1>
-                    <p class="text-sm font-bold text-slate-500 uppercase tracking-[0.3em]">Laporan Keputusan Rasmi Pertandingan</p>
-                </div>
-
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 border-b border-slate-100 text-[10px] text-slate-400 uppercase font-black">
                             <tr>
                                 <th class="px-8 py-5">Ked</th>
                                 <th class="px-8 py-5">Nama Peserta</th>
-                                <th class="px-4 py-5 text-center">Vocal</th>
+                                <th class="px-4 py-5 text-center">Vokal</th>
                                 <th class="px-4 py-5 text-center">Tempo</th>
                                 <th class="px-4 py-5 text-center">Hayati</th>
                                 <th class="px-4 py-5 text-center">Pentas</th>
@@ -205,7 +234,7 @@
                                 <th class="px-8 py-5 text-right text-indigo-600">Jumlah</th>
                             </tr>
                         </thead>
-                        <tbody id="finalResults" class="divide-y divide-slate-50"></tbody>
+                        <tbody id="finalResults" class="divide-y divide-slate-50 bg-white"></tbody>
                     </table>
                 </div>
             </div>
@@ -215,10 +244,9 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, setDoc, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyApySSqLX7_UPUDclsS7cbbFUb-YMebdBo",
             authDomain: "markahkaraoke.firebaseapp.com",
@@ -239,31 +267,18 @@
         let currentUserId = null;
 
         const initAuth = async () => {
-            try {
-                await signInAnonymously(auth);
-            } catch (error) {
-                console.error("Auth error:", error);
+            try { await signInAnonymously(auth); } catch (e) {
                 const syncStatus = document.getElementById('syncStatus');
                 syncStatus.classList.replace('text-emerald-500', 'text-red-500');
-                syncStatus.classList.replace('bg-emerald-50', 'bg-red-50');
-                syncStatus.title = "Ralat Sambungan";
             }
         };
         initAuth();
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                startSync();
-            }
-        });
+        onAuthStateChanged(auth, (user) => { if (user) { currentUserId = user.uid; startSync(); } });
 
         function startSync() {
             onSnapshot(participantsCol, (snapshot) => {
-                data = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAll();
             }, (error) => {
                 console.error("Snapshot error:", error);
@@ -279,7 +294,6 @@
             });
             document.getElementById(`page-${tab}`).classList.remove('hidden');
             document.getElementById(`btn-${tab}`).classList.add('tab-active');
-            document.getElementById(`btn-${tab}`).classList.remove('text-slate-500');
             renderAll();
         };
 
@@ -294,18 +308,9 @@
             e.preventDefault();
             const name = document.getElementById('regName').value.trim();
             if(!name || !currentUserId) return;
-
             try {
                 await addDoc(participantsCol, {
-                    name: name,
-                    vocal: 0,
-                    tempo: 0,
-                    penghayatan: 0,
-                    stage: 0,
-                    style: 0,
-                    total: 0,
-                    hasJudged: false,
-                    createdAt: new Date().getTime()
+                    name, vocal: 0, tempo: 0, penghayatan: 0, stage: 0, style: 0, total: 0, hasJudged: false, createdAt: new Date().getTime()
                 });
                 document.getElementById('regName').value = '';
             } catch (err) { alert("Gagal menambah peserta."); }
@@ -313,26 +318,22 @@
 
         window.renderRegList = () => {
             const list = document.getElementById('regList');
-            if (data.length === 0) {
-                list.innerHTML = `<tr><td colspan="4" class="p-12 text-center text-slate-300 font-medium italic">Tiada peserta didaftarkan lagi...</td></tr>`;
-                return;
-            }
+            if (data.length === 0) { list.innerHTML = `<tr><td colspan="4" class="p-12 text-center text-slate-300 font-medium italic">Tiada peserta didaftarkan lagi...</td></tr>`; return; }
             const sortedReg = [...data].sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
             list.innerHTML = sortedReg.map((p, i) => `
                 <tr class="hover:bg-indigo-50/30 transition-colors">
                     <td class="px-8 py-5 text-xs font-bold text-slate-300">${i+1}</td>
                     <td class="px-8 py-5 font-black text-slate-700 uppercase text-sm tracking-tight">${p.name}</td>
                     <td class="px-8 py-5 text-center">
-                        ${p.hasJudged 
-                            ? `<span class="bg-emerald-100 text-emerald-700 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Selesai</span>` 
-                            : `<span class="bg-amber-100 text-amber-700 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Menunggu</span>`}
+                        ${p.hasJudged ? `<span class="bg-emerald-100 text-emerald-700 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Selesai</span>` 
+                        : `<span class="bg-amber-100 text-amber-700 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Menunggu</span>`}
                     </td>
                     <td class="px-8 py-5 text-right">
                         <div class="flex justify-end gap-3">
-                            <button onclick="editParticipant('${p.id}')" class="bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all p-2 rounded-xl shadow-sm">
+                            <button onclick="editParticipant('${p.id}')" class="bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all p-2 rounded-xl">
                                 <i data-lucide="edit-2" class="w-4 h-4"></i>
                             </button>
-                            <button onclick="deleteParticipant('${p.id}')" class="bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all p-2 rounded-xl shadow-sm">
+                            <button onclick="deleteParticipant('${p.id}')" class="bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all p-2 rounded-xl">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -344,29 +345,22 @@
 
         window.editParticipant = async (id) => {
             const p = data.find(item => item.id === id);
-            if(!p) return;
             const newName = prompt("Kemaskini Nama Peserta:", p.name);
             if(newName && newName.trim() !== "") {
-                try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', id), {
-                        name: newName.trim()
-                    });
-                } catch (e) { alert("Gagal kemaskini."); }
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', id), { name: newName.trim() });
             }
         };
 
         window.deleteParticipant = async (id) => {
-            if(confirm('Hapus peserta ini? Semua markah akan hilang.')) {
-                try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', id));
-                } catch (e) { alert("Gagal hapus."); }
+            if(confirm('Hapus peserta ini secara kekal?')) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', id));
             }
         };
 
         window.populateJudgeSelect = () => {
             const select = document.getElementById('judgeSelect');
-            const currentValue = select.value;
             const alphabetData = [...data].sort((a,b) => a.name.localeCompare(b.name));
+            const currentValue = select.value;
             select.innerHTML = '<option value="">-- Sila Pilih Nama Peserta --</option>' + 
                 alphabetData.map(p => `<option value="${p.id}" ${p.id === currentValue ? 'selected' : ''}>${p.name.toUpperCase()} ${p.hasJudged ? '✓' : ''}</option>`).join('');
         };
@@ -381,44 +375,35 @@
                 document.getElementById('v_penghayatan').value = p.hasJudged ? p.penghayatan : '';
                 document.getElementById('v_stage').value = p.hasJudged ? p.stage : '';
                 document.getElementById('v_style').value = p.hasJudged ? p.style : '';
-            } else {
-                form.classList.add('opacity-20', 'pointer-events-none', 'scale-95');
+            } else { 
+                form.classList.add('opacity-20', 'pointer-events-none', 'scale-95'); 
             }
         });
 
         document.getElementById('judgeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('judgeSelect').value;
-            if(!id) return;
-
             const v = parseFloat(document.getElementById('v_vocal').value) || 0;
             const t = parseFloat(document.getElementById('v_tempo').value) || 0;
             const ph = parseFloat(document.getElementById('v_penghayatan').value) || 0;
             const st = parseFloat(document.getElementById('v_stage').value) || 0;
             const sy = parseFloat(document.getElementById('v_style').value) || 0;
-
             try {
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', id), {
-                    vocal: v,
-                    tempo: t,
-                    penghayatan: ph,
-                    stage: st,
-                    style: sy,
-                    total: v + t + ph + st + sy,
-                    hasJudged: true
+                    vocal: v, tempo: t, penghayatan: ph, stage: st, style: sy, total: v+t+ph+st+sy, hasJudged: true
                 });
-                alert('Markah untuk ' + data.find(p=>p.id===id).name + ' berjaya disimpan!');
-            } catch (err) { alert("Gagal simpan markah."); }
+                alert('Markah disimpan!');
+            } catch (err) {
+                alert("Ralat menyimpan markah.");
+            }
         });
 
         window.renderFinalResults = () => {
             const sorted = [...data].sort((a, b) => b.total - a.total);
             const body = document.getElementById('finalResults');
-            
             body.innerHTML = sorted.map((p, i) => {
-                const rowClass = i === 0 ? 'bg-indigo-50/40' : i === 1 ? 'bg-slate-50/50' : i === 2 ? 'bg-amber-50/30' : '';
+                const rowClass = i === 0 ? 'bg-indigo-50/50' : i === 1 ? 'bg-slate-50/50' : i === 2 ? 'bg-amber-50/40' : '';
                 const rankLabel = i === 0 ? '🥇 JOHAN' : i === 1 ? '🥈 NAIB JOHAN' : i === 2 ? '🥉 KETIGA' : (i+1);
-                
                 return `
                     <tr class="${rowClass} transition-colors group">
                         <td class="px-8 py-6 font-black text-[10px] text-slate-800">${rankLabel}</td>
@@ -428,7 +413,7 @@
                         <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.penghayatan}</td>
                         <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.stage}</td>
                         <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.style}</td>
-                        <td class="px-8 py-6 text-right font-black text-indigo-700 text-2xl group-hover:scale-110 transition-transform origin-right">${p.total.toFixed(1)}</td>
+                        <td class="px-8 py-6 text-right font-black text-indigo-700 text-2xl">${p.total.toFixed(1)}</td>
                     </tr>
                 `;
             }).join('');
@@ -436,41 +421,36 @@
             const topCards = document.getElementById('topThreeCards');
             if(sorted.length > 0) {
                 topCards.innerHTML = sorted.slice(0, 3).map((p, i) => `
-                    <div class="glass-card p-8 rounded-[3rem] border-b-8 ${i === 0 ? 'border-indigo-500 shadow-2xl shadow-indigo-100' : i === 1 ? 'border-slate-300 shadow-xl' : 'border-amber-400 shadow-xl'} transition-all hover:-translate-y-2 no-print relative overflow-hidden">
+                    <div class="glass-card p-6 md:p-8 rounded-[3rem] border-b-8 ${i===0?'border-indigo-500 shadow-2xl':i===1?'border-slate-300 shadow-xl':'border-amber-400 shadow-xl'} no-print relative overflow-hidden flex flex-col justify-between h-full">
                         <div class="absolute -right-4 -top-4 opacity-5 pointer-events-none">
                             <i data-lucide="crown" class="w-32 h-32"></i>
                         </div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[9px] font-black uppercase px-4 py-2 ${i === 0 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'} rounded-full tracking-widest">
-                                ${i === 0 ? 'Juara Keseluruhan' : i === 1 ? 'Naib Juara' : 'Tempat Ketiga'}
-                            </span>
-                            <div class="p-2 rounded-xl ${i === 0 ? 'bg-yellow-100 text-yellow-600' : 'bg-slate-100 text-slate-400'}">
-                                <i data-lucide="${i === 0 ? 'crown' : 'award'}" class="w-6 h-6"></i>
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <span class="text-[9px] font-black uppercase px-4 py-2 ${i===0?'bg-indigo-600 text-white shadow-md':'bg-slate-200 text-slate-600'} rounded-full tracking-widest">
+                                    ${i===0?'Juara Keseluruhan':i===1?'Naib Juara':'Tempat Ketiga'}
+                                </span>
+                                <div class="p-2.5 rounded-2xl ${i===0?'bg-yellow-100 text-yellow-600 shadow-sm':i===1?'bg-slate-100 text-slate-400 shadow-sm':'bg-amber-100 text-amber-600 shadow-sm'}">
+                                    <i data-lucide="${i===0?'crown':i===1?'award':'medal'}" class="w-6 h-6"></i>
+                                </div>
                             </div>
+                            <h4 class="text-2xl font-black text-slate-800 uppercase truncate mb-4 tracking-tight">${p.name}</h4>
                         </div>
-                        <h4 class="text-2xl font-black text-slate-800 uppercase truncate mb-4">${p.name}</h4>
-                        <div class="flex items-baseline gap-2">
+                        <div class="flex items-baseline gap-2 mt-auto">
                             <span class="text-5xl font-black text-indigo-700 tracking-tighter">${p.total.toFixed(1)}</span>
                             <span class="text-xs font-black text-slate-300">/ 100</span>
                         </div>
                     </div>
                 `).join('');
                 lucide.createIcons();
-            } else {
-                topCards.innerHTML = `<div class="md:col-span-3 glass-card p-12 rounded-[2.5rem] border border-dashed border-indigo-200 text-center text-indigo-300 font-black uppercase text-xs tracking-[0.5em] no-print">Menunggu Markah Pertama Dimasukkan...</div>`;
-            }
+            } else { topCards.innerHTML = `<div class="md:col-span-3 glass-card p-12 text-center text-indigo-300 font-black uppercase text-xs tracking-[0.5em] no-print">Menunggu Markah Peserta Dimasukkan...</div>`; }
         };
 
         window.resetData = async () => {
-            if(confirm('AMARAN: Ini akan memadam semua data peserta dari pangkalan data Firebase secara kekal!\n\nAdakah anda pasti?')) {
-                try {
-                    for (const p of data) {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', p.id));
-                    }
-                } catch (e) { alert("Gagal padam data."); }
+            if(confirm('AMARAN: Padam semua data peserta dari pangkalan data Firebase secara kekal?')) {
+                for (const p of data) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'participants', p.id));
             }
         };
-
         lucide.createIcons();
     </script>
 </body>
