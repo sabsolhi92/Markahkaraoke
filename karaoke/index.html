@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARI MENYANYI CIKGU!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .tab-active { border-bottom: 4px solid #6366f1; color: #6366f1; }
+        .bg-cikgu { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        
+        /* Gaya untuk cetakan - sorok navigasi & butang semasa print */
+        @media print {
+            header, nav, #regForm, #judgeForm, button, .no-print {
+                display: none !important;
+            }
+            main { margin: 0; padding: 0; }
+            section { display: none; }
+            #page-statistik { display: block !important; }
+            .shadow-sm, .shadow-xl { shadow: none !important; border: 1px solid #eee; }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- Header & Navigasi -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm no-print">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-cikgu p-2 rounded-xl text-white shadow-lg">
+                        <i data-lucide="music" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase">MARI MENYANYI <span class="text-indigo-600">CIKGU!</span></h1>
+                        <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Sistem Pengurusan Markah</p>
+                    </div>
+                </div>
+                <button onclick="resetData()" class="text-[10px] text-red-400 hover:text-red-600 font-bold flex items-center gap-1 border border-red-100 px-2 py-1 rounded-lg">
+                    <i data-lucide="trash-2" class="w-3 h-3"></i> PADAM SEMUA DATA
+                </button>
+            </div>
+            
+            <nav class="flex gap-8 overflow-x-auto no-scrollbar">
+                <button onclick="switchTab('pendaftaran')" id="btn-pendaftaran" class="tab-active py-3 px-1 text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i> PENDAFTARAN
+                </button>
+                <button onclick="switchTab('pemarkahan')" id="btn-pemarkahan" class="py-3 px-1 text-xs font-bold text-slate-500 flex items-center gap-2 transition-all whitespace-nowrap">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i> PEMARKAHAN
+                </button>
+                <button onclick="switchTab('statistik')" id="btn-statistik" class="py-3 px-1 text-xs font-bold text-slate-500 flex items-center gap-2 transition-all whitespace-nowrap">
+                    <i data-lucide="bar-chart-high" class="w-4 h-4"></i> RUMUSAN PEMENANG
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-6 mt-2">
+        
+        <!-- MODUL 1: PENDAFTARAN -->
+        <section id="page-pendaftaran" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-sm font-black mb-4 text-slate-800 uppercase tracking-wider">Langkah 1: Daftar Peserta</h2>
+                <form id="regForm" class="flex flex-col md:flex-row gap-3">
+                    <input type="text" id="regName" required class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="Taip nama cikgu di sini...">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-indigo-100">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i> Simpan Nama
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-4 bg-slate-50 border-b border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase">Senarai Peserta Berdaftar</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white border-b border-slate-100">
+                            <tr>
+                                <th class="px-6 py-3 text-[10px] font-black text-slate-400 uppercase">Bil</th>
+                                <th class="px-6 py-3 text-[10px] font-black text-slate-400 uppercase">Nama Peserta</th>
+                                <th class="px-6 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th>
+                                <th class="px-6 py-3 text-[10px] font-black text-slate-400 uppercase text-right">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODUL 2: PEMARKAHAN -->
+        <section id="page-pemarkahan" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-sm font-black mb-4 text-slate-800 uppercase tracking-wider">Langkah 2: Pemarkahan</h2>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Pilih Nama Cikgu</label>
+                    <select id="judgeSelect" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none appearance-none bg-white font-bold text-slate-700">
+                        <option value="">-- Pilih Peserta --</option>
+                    </select>
+                </div>
+
+                <form id="judgeForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 opacity-30 pointer-events-none transition-opacity">
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase">Vokal (40%)</label>
+                        <input type="number" id="v_vocal" min="0" max="40" step="0.1" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600" placeholder="Max 40">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase">Tempo & Pitch (20%)</label>
+                        <input type="number" id="v_tempo" min="0" max="20" step="0.1" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600" placeholder="Max 20">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase">Penghayatan (20%)</label>
+                        <input type="number" id="v_penghayatan" min="0" max="20" step="0.1" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600" placeholder="Max 20">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase">Persembahan (10%)</label>
+                        <input type="number" id="v_stage" min="0" max="10" step="0.1" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600" placeholder="Max 10">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase">Penampilan (10%)</label>
+                        <input type="number" id="v_style" min="0" max="10" step="0.1" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600" placeholder="Max 10">
+                    </div>
+                    
+                    <div class="lg:col-span-5 pt-4">
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 text-lg shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest">
+                            <i data-lucide="check-square" class="w-6 h-6"></i> SIMPAN MARKAH
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- MODUL 3: STATISTIK -->
+        <section id="page-statistik" class="hidden space-y-6">
+            <!-- Podium / Top 3 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="topThreeCards"></div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center no-print">
+                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider">Keputusan Keseluruhan (Markah Penuh 100%)</h3>
+                    <button onclick="window.print()" class="text-[10px] bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors font-bold uppercase flex items-center gap-1">
+                        <i data-lucide="printer" class="w-3 h-3"></i> Cetak Keputusan
+                    </button>
+                </div>
+                <!-- Tajuk Khas semasa Print -->
+                <div class="hidden print:block text-center py-6">
+                    <h1 class="text-2xl font-black uppercase">MARI MENYANYI CIKGU!</h1>
+                    <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">Laporan Keputusan Rasmi Pertandingan</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white border-b border-slate-100 text-[10px] text-slate-400 uppercase font-black">
+                            <tr>
+                                <th class="px-6 py-4">Ked</th>
+                                <th class="px-6 py-4">Nama Peserta</th>
+                                <th class="px-6 py-4">Vokal</th>
+                                <th class="px-6 py-4">Tempo</th>
+                                <th class="px-6 py-4">Hayati</th>
+                                <th class="px-6 py-4">Pentas</th>
+                                <th class="px-6 py-4">Rupa</th>
+                                <th class="px-6 py-4 text-right">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finalResults"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Inisialisasi Ikon
+        lucide.createIcons();
+
+        // Pengurusan Data (Simpanan Tempatan)
+        let data = JSON.parse(localStorage.getItem('karaoke_cikgu_data')) || [];
+
+        // Logik Penukaran Tab
+        function switchTab(tab) {
+            const tabs = ['pendaftaran', 'pemarkahan', 'statistik'];
+            tabs.forEach(t => {
+                document.getElementById(`page-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).classList.remove('tab-active');
+                document.getElementById(`btn-${t}`).classList.add('text-slate-500');
+            });
+            
+            document.getElementById(`page-${tab}`).classList.remove('hidden');
+            document.getElementById(`btn-${tab}`).classList.add('tab-active');
+            document.getElementById(`btn-${tab}`).classList.remove('text-slate-500');
+
+            if(tab === 'pemarkahan') populateJudgeSelect();
+            if(tab === 'statistik') renderFinalResults();
+            if(tab === 'pendaftaran') renderRegList();
+        }
+
+        // MODUL: PENDAFTARAN
+        document.getElementById('regForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            if(!name) return;
+
+            data.push({
+                id: Date.now(),
+                name: name,
+                vocal: 0,
+                tempo: 0,
+                penghayatan: 0,
+                stage: 0,
+                style: 0,
+                total: 0,
+                hasJudged: false
+            });
+
+            save();
+            renderRegList();
+            document.getElementById('regName').value = '';
+        });
+
+        function renderRegList() {
+            const list = document.getElementById('regList');
+            if(data.length === 0) {
+                list.innerHTML = `<tr><td colspan="4" class="p-12 text-center text-slate-300 font-medium italic">Tiada peserta didaftarkan lagi...</td></tr>`;
+                return;
+            }
+            list.innerHTML = data.map((p, i) => `
+                <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 text-xs font-bold text-slate-400">${i+1}</td>
+                    <td class="px-6 py-4 font-bold text-slate-700 uppercase text-sm">${p.name}</td>
+                    <td class="px-6 py-4">
+                        ${p.hasJudged 
+                            ? `<span class="bg-emerald-50 text-emerald-600 text-[10px] px-2 py-1 rounded-full font-black uppercase">Sudah Dinilai</span>` 
+                            : `<span class="bg-amber-50 text-amber-600 text-[10px] px-2 py-1 rounded-full font-black uppercase tracking-tighter">Menunggu Giliran</span>`}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick="editParticipant(${p.id})" class="text-blue-400 hover:text-blue-600 transition-colors">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteParticipant(${p.id})" class="text-slate-300 hover:text-red-500 transition-colors">
+                                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function editParticipant(id) {
+            const index = data.findIndex(p => p.id === id);
+            if(index !== -1) {
+                const newName = prompt("Kemaskini Nama Peserta:", data[index].name);
+                if(newName !== null && newName.trim() !== "") {
+                    data[index].name = newName.trim();
+                    save();
+                    renderRegList();
+                }
+            }
+        }
+
+        function deleteParticipant(id) {
+            if(confirm('Adakah anda mahu memadam peserta ini daripada senarai?')) {
+                data = data.filter(p => p.id !== id);
+                save();
+                renderRegList();
+            }
+        }
+
+        // MODUL: PEMARKAHAN
+        function populateJudgeSelect() {
+            const select = document.getElementById('judgeSelect');
+            select.innerHTML = '<option value="">-- Pilih Peserta --</option>' + 
+                data.map(p => `<option value="${p.id}">${p.name} ${p.hasJudged ? '✓' : ''}</option>`).join('');
+        }
+
+        document.getElementById('judgeSelect').addEventListener('change', (e) => {
+            const form = document.getElementById('judgeForm');
+            if(e.target.value) {
+                form.classList.remove('opacity-30', 'pointer-events-none');
+                const p = data.find(item => item.id == e.target.value);
+                document.getElementById('v_vocal').value = p.hasJudged ? p.vocal : '';
+                document.getElementById('v_tempo').value = p.hasJudged ? p.tempo : '';
+                document.getElementById('v_penghayatan').value = p.hasJudged ? p.penghayatan : '';
+                document.getElementById('v_stage').value = p.hasJudged ? p.stage : '';
+                document.getElementById('v_style').value = p.hasJudged ? p.style : '';
+            } else {
+                form.classList.add('opacity-30', 'pointer-events-none');
+            }
+        });
+
+        document.getElementById('judgeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('judgeSelect').value;
+            const vocal = parseFloat(document.getElementById('v_vocal').value) || 0;
+            const tempo = parseFloat(document.getElementById('v_tempo').value) || 0;
+            const penghayatan = parseFloat(document.getElementById('v_penghayatan').value) || 0;
+            const stage = parseFloat(document.getElementById('v_stage').value) || 0;
+            const style = parseFloat(document.getElementById('v_style').value) || 0;
+
+            const index = data.findIndex(item => item.id == id);
+            if(index !== -1) {
+                data[index].vocal = vocal;
+                data[index].tempo = tempo;
+                data[index].penghayatan = penghayatan;
+                data[index].stage = stage;
+                data[index].style = style;
+                data[index].total = vocal + tempo + penghayatan + stage + style;
+                data[index].hasJudged = true;
+
+                save();
+                alert('Markah untuk ' + data[index].name + ' berjaya disimpan!');
+                // Tidak lagi switchTab ke statistik secara automatik
+                populateJudgeSelect(); // Refresh senarai dropdown untuk tunjuk tanda ✓
+            }
+        });
+
+        // MODUL: STATISTIK
+        function renderFinalResults() {
+            const sorted = [...data].sort((a, b) => b.total - a.total);
+            const body = document.getElementById('finalResults');
+            
+            body.innerHTML = sorted.map((p, i) => {
+                const rowClass = i === 0 ? 'bg-indigo-50/50' : i === 1 ? 'bg-slate-50/50' : i === 2 ? 'bg-amber-50/30' : '';
+                const rankLabel = i === 0 ? '🏆 JOHAN' : i === 1 ? '🥈 NAIB JOHAN' : i === 2 ? '🥉 KETIGA' : (i+1);
+                
+                return `
+                    <tr class="border-b border-slate-100 ${rowClass} transition-colors">
+                        <td class="px-6 py-4 font-black text-[10px] text-slate-800">${rankLabel}</td>
+                        <td class="px-6 py-4 font-bold text-slate-700 uppercase text-sm">${p.name}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-slate-500">${p.vocal}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-slate-500">${p.tempo}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-slate-500">${p.penghayatan}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-slate-500">${p.stage}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-slate-500">${p.style}</td>
+                        <td class="px-6 py-4 text-right font-black text-indigo-700 text-lg">${p.total.toFixed(1)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Kemaskini Paparan Top 3
+            const topCards = document.getElementById('topThreeCards');
+            if(sorted.length > 0) {
+                topCards.innerHTML = sorted.slice(0, 3).map((p, i) => `
+                    <div class="bg-white p-5 rounded-2xl border-b-4 ${i === 0 ? 'border-indigo-500 shadow-indigo-100' : i === 1 ? 'border-slate-300' : 'border-amber-400'} shadow-xl no-print">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-black uppercase px-2 py-1 ${i === 0 ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'} rounded-lg">
+                                ${i === 0 ? 'Pemenang Utama' : i === 1 ? 'Naib Johan' : 'Ketiga'}
+                            </span>
+                            <i data-lucide="${i === 0 ? 'crown' : 'award'}" class="w-5 h-5 ${i === 0 ? 'text-indigo-600' : 'text-slate-300'}"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800 uppercase truncate">${p.name}</h4>
+                        <div class="mt-4 flex items-baseline gap-1">
+                            <span class="text-4xl font-black text-indigo-700">${p.total.toFixed(1)}</span>
+                            <span class="text-xs font-bold text-slate-400">/ 100</span>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            } else {
+                topCards.innerHTML = `<div class="md:col-span-3 bg-white p-8 rounded-2xl border border-dashed border-slate-200 text-center text-slate-400 font-bold uppercase text-xs tracking-widest no-print">Data statistik akan muncul selepas markah dimasukkan</div>`;
+            }
+        }
+
+        function save() {
+            localStorage.setItem('karaoke_cikgu_data', JSON.stringify(data));
+        }
+
+        function resetData() {
+            if(confirm(`AMARAN: Semua data pendaftaran dan markah akan dipadamkan!\n\nKlik OK untuk teruskan.`)) {
+                data = [];
+                save();
+                location.reload();
+            }
+        }
+
+        // Muatan Permulaan
+        renderRegList();
+    </script>
+</body>
+</html>
