@@ -61,7 +61,7 @@
             }
             .print-header { display: block !important; text-align: center; margin-bottom: 30px; }
             table { width: 100% !important; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #ddd !important; padding: 8px !important; font-size: 9pt !important; }
+            th, td { border: 1px solid #ddd !important; padding: 6px !important; font-size: 8pt !important; }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -74,7 +74,6 @@
         <div class="max-w-5xl mx-auto px-4">
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center gap-3">
-                    <!-- Logo Utama -->
                     <div class="shadow-lg rounded-xl overflow-hidden border-2 border-white ring-2 ring-indigo-100 bg-white">
                         <img src="image_7ec5c4.jpg" class="w-12 h-12 object-cover" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3059/3059518.png'">
                     </div>
@@ -170,27 +169,27 @@
                 </div>
 
                 <form id="judgeForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 opacity-20 pointer-events-none transition-all duration-500 scale-95 origin-top">
-                    <!-- Kriteria 1: Vokal 40% -->
+                    <!-- Kriteria 1: Vokal -->
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-indigo-50 shadow-sm">
                         <label class="block text-[10px] font-black text-indigo-400 uppercase tracking-tighter">Vokal (40%)</label>
                         <input type="number" id="v_vocal" min="0" max="40" step="0.1" required class="w-full px-4 py-3 bg-indigo-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-300 outline-none font-black text-indigo-700 text-xl" placeholder="0">
                     </div>
-                    <!-- Kriteria 2: Tempo & Pitch 20% -->
+                    <!-- Kriteria 2: Tempo & Pitch -->
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-blue-50 shadow-sm">
                         <label class="block text-[10px] font-black text-blue-400 uppercase tracking-tighter">Tempo & Pitch (20%)</label>
                         <input type="number" id="v_tempo" min="0" max="20" step="0.1" required class="w-full px-4 py-3 bg-blue-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-300 outline-none font-black text-blue-700 text-xl" placeholder="0">
                     </div>
-                    <!-- Kriteria 3: Penghayatan 20% -->
+                    <!-- Kriteria 3: Penghayatan -->
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-emerald-50 shadow-sm">
                         <label class="block text-[10px] font-black text-emerald-400 uppercase tracking-tighter">Penghayatan (20%)</label>
                         <input type="number" id="v_penghayatan" min="0" max="20" step="0.1" required class="w-full px-4 py-3 bg-emerald-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-300 outline-none font-black text-emerald-700 text-xl" placeholder="0">
                     </div>
-                    <!-- Kriteria 4: Persembahan Pentas 10% -->
+                    <!-- Kriteria 4: Persembahan Pentas -->
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-purple-50 shadow-sm">
-                        <label class="block text-[10px] font-black text-purple-400 uppercase tracking-tighter">Pentas (10%)</label>
+                        <label class="block text-[10px] font-black text-purple-400 uppercase tracking-tighter">Persembahan Pentas (10%)</label>
                         <input type="number" id="v_stage" min="0" max="10" step="0.1" required class="w-full px-4 py-3 bg-purple-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-300 outline-none font-black text-purple-700 text-xl" placeholder="0">
                     </div>
-                    <!-- Kriteria 5: Penampilan 10% -->
+                    <!-- Kriteria 5: Penampilan -->
                     <div class="space-y-2 bg-white p-4 rounded-2xl border-2 border-pink-50 shadow-sm">
                         <label class="block text-[10px] font-black text-pink-400 uppercase tracking-tighter">Penampilan (10%)</label>
                         <input type="number" id="v_style" min="0" max="10" step="0.1" required class="w-full px-4 py-3 bg-pink-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-300 outline-none font-black text-pink-700 text-xl" placeholder="0">
@@ -198,7 +197,7 @@
                     
                     <div class="lg:col-span-5 pt-4">
                         <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-5 rounded-[2rem] flex items-center justify-center gap-3 text-xl shadow-xl shadow-emerald-100 transition-all uppercase tracking-widest hover:-translate-y-1 active:scale-95">
-                            <i data-lucide="save" class="w-6 h-6"></i> SAHKAN & SIMPAN MARKAH
+                            <i data-lucide="save" class="w-6 h-6"></i> SIMPAN MARKAH
                         </button>
                     </div>
                 </form>
@@ -209,7 +208,7 @@
         <section id="page-statistik" class="hidden space-y-8 pb-12">
             
             <div id="pdf-content">
-                <!-- Bahagian Cetakan (PDF/Print) -->
+                <!-- Bahagian Cetakan -->
                 <div class="hidden print-header pdf-header p-4">
                     <img src="image_7ec5c4.jpg" class="w-20 h-20 object-cover mx-auto mb-2 rounded-xl" alt="Logo">
                     <h1 class="text-2xl font-black uppercase text-slate-800">LAPORAN KEPUTUSAN MARI MENYANYI</h1>
@@ -238,16 +237,16 @@
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 border-b border-slate-100 text-[10px] text-slate-400 uppercase font-black">
+                            <thead class="bg-slate-50 border-b border-slate-100 text-[9px] text-slate-400 uppercase font-black">
                                 <tr>
-                                    <th class="px-8 py-5">Ked</th>
-                                    <th class="px-8 py-5">Nama Peserta</th>
-                                    <th class="px-4 py-5 text-center">Vokal (40)</th>
-                                    <th class="px-4 py-5 text-center">Tempo (20)</th>
-                                    <th class="px-4 py-5 text-center">Hayati (20)</th>
-                                    <th class="px-4 py-5 text-center">Pentas (10)</th>
-                                    <th class="px-4 py-5 text-center">Rupa (10)</th>
-                                    <th class="px-8 py-5 text-right text-indigo-600">Jumlah (100)</th>
+                                    <th class="px-6 py-5">Ked</th>
+                                    <th class="px-6 py-5">Nama Peserta</th>
+                                    <th class="px-4 py-5 text-center">Vokal (40%)</th>
+                                    <th class="px-4 py-5 text-center">Tempo & Pitch (20%)</th>
+                                    <th class="px-4 py-5 text-center">Penghayatan (20%)</th>
+                                    <th class="px-4 py-5 text-center">Persembahan Pentas (10%)</th>
+                                    <th class="px-4 py-5 text-center">Penampilan (10%)</th>
+                                    <th class="px-6 py-5 text-right text-indigo-600">Jumlah (100)</th>
                                 </tr>
                             </thead>
                             <tbody id="finalResults" class="divide-y divide-slate-50 bg-white"></tbody>
@@ -387,10 +386,10 @@
                     </td>
                     <td class="px-8 py-5 text-right">
                         <div class="flex justify-end gap-3">
-                            <button onclick="editParticipant('${p.id}')" class="bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all p-2 rounded-xl shadow-sm">
+                            <button onclick="editParticipant('${p.id}')" class="bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all p-2 rounded-xl">
                                 <i data-lucide="edit-2" class="w-4 h-4"></i>
                             </button>
-                            <button onclick="deleteParticipant('${p.id}')" class="bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all p-2 rounded-xl shadow-sm">
+                            <button onclick="deleteParticipant('${p.id}')" class="bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all p-2 rounded-xl">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -432,9 +431,7 @@
                 document.getElementById('v_penghayatan').value = p.hasJudged ? p.penghayatan : '';
                 document.getElementById('v_stage').value = p.hasJudged ? p.stage : '';
                 document.getElementById('v_style').value = p.hasJudged ? p.style : '';
-            } else { 
-                form.classList.add('opacity-20', 'pointer-events-none', 'scale-95'); 
-            }
+            } else { form.classList.add('opacity-20', 'pointer-events-none', 'scale-95'); }
         });
 
         document.getElementById('judgeForm').addEventListener('submit', async (e) => {
@@ -450,9 +447,7 @@
                     vocal: v, tempo: t, penghayatan: ph, stage: st, style: sy, total: v+t+ph+st+sy, hasJudged: true
                 });
                 alert('Markah disimpan!');
-            } catch (err) {
-                alert("Ralat menyimpan.");
-            }
+            } catch (err) { alert("Ralat menyimpan."); }
         });
 
         window.renderFinalResults = () => {
@@ -460,17 +455,17 @@
             const body = document.getElementById('finalResults');
             body.innerHTML = sorted.map((p, i) => {
                 const rankLabel = i === 0 ? '🥇 JOHAN' : i === 1 ? '🥈 NAIB JOHAN' : i === 2 ? '🥉 KETIGA' : (i+1);
-                const rowClass = i === 0 ? 'bg-indigo-50/40' : i === 1 ? 'bg-slate-50/50' : i === 2 ? 'bg-amber-50/30' : '';
+                const rowClass = i === 0 ? 'bg-indigo-50/50' : i === 1 ? 'bg-slate-50/50' : i === 2 ? 'bg-amber-50/40' : '';
                 return `
-                    <tr class="${rowClass} transition-colors">
-                        <td class="px-8 py-6 font-black text-[10px] text-slate-800">${rankLabel}</td>
-                        <td class="px-8 py-6 font-black text-slate-700 uppercase text-sm tracking-tight">${p.name}</td>
-                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.vocal}</td>
-                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.tempo}</td>
-                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.penghayatan}</td>
-                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.stage}</td>
-                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.style}</td>
-                        <td class="px-8 py-6 text-right font-black text-indigo-700 text-2xl">${p.total.toFixed(1)}</td>
+                    <tr class="${rowClass} transition-colors group">
+                        <td class="px-6 py-6 font-black text-[10px] text-slate-800">${rankLabel}</td>
+                        <td class="px-6 py-6 font-black text-slate-700 uppercase text-sm tracking-tight">${p.name}</td>
+                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.vocal || 0}</td>
+                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.tempo || 0}</td>
+                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.penghayatan || 0}</td>
+                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.stage || 0}</td>
+                        <td class="px-4 py-6 text-xs text-center font-bold text-slate-400">${p.style || 0}</td>
+                        <td class="px-6 py-6 text-right font-black text-indigo-700 text-2xl">${p.total.toFixed(1)}</td>
                     </tr>
                 `;
             }).join('');
